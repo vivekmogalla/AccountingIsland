@@ -1,0 +1,33 @@
+.custom-header {
+    background-color: #00474e; /* Replace this with the desired color */
+    color: #fff; /* Set text color to white for better contrast */
+    padding: 10px; /* Add some padding to the header (optional) */
+}
+
+.custom-error {
+    font-size: 16px; /* Set the desired font size for error messages */
+    color: red; /* Set the desired color for error messages */
+    /* Add any other custom styling as needed */
+}
+
+/* Add custom styles for the help text */
+.custom-help-text {
+  font-size: 14px;
+  color: #6c757d;
+  margin-top: 5px;
+}
+
+/* Remove bullet points from the error messages */
+.custom-help-text ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+
+/* static/css/dashboard.css */
+body {
+    background-image: url('/static/users/img/accounting-icons-set_1284-3976.avif');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
