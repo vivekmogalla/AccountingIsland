@@ -1,3 +1,6 @@
 venv/
 .idea/
 *.pyc
+**/__pycache__/
+**/*.cpython-39.pyc
+db.sqlite3
