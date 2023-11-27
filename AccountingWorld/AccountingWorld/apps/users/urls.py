@@ -14,4 +14,16 @@ urlpatterns = [
     # uses can log out through this url # User Logout
     path('logout/', views.LogoutView.as_view(), name='logout'),
 
+    # users can reset their password through this url # Password Reset # clear to me
+    path('password-reset/', views.CustomPasswordResetView.as_view(), name='password_reset'),
+
+    # users confirmation password reset through this url # Password Reset Confirmation # clear to me
+    path('password-reset/done', views.CustomPasswordResetDoneView.as_view(), name='password_reset_done'),
+
+    # users password reset activation token through this url # Password Reset Activation Token
+    path('reset/<uidb64>/<token>/', views.CustomPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+
+    # users password reset complete
+    path('password-reset-complete/', views.CustomPasswordResetCompleteView.as_view(), name='password_reset_complete'),
+
 ]

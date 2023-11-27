@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordResetForm
 from django.contrib.auth import get_user_model
 
 
@@ -27,3 +27,16 @@ class SignUpForm(UserCreationForm):
 class LoginForm(forms.Form):
     username = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput)
+
+
+class CustomPasswordResetForm(PasswordResetForm):
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        user = get_user_model()  # get the custom user model class
+        if not user.objects.filter(email=email).exists():
+            raise forms.ValidationError("The email is not registered yet. Please register")
+        elif user.objects.filter(email=email, is_active=False).first():
+            raise forms.ValidationError("The email is registered but not activated. Please check your mail and activate")
+        else:
+            pass
+        return email

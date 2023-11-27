@@ -15,7 +15,9 @@ from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
-from .forms import SignUpForm, LoginForm
+from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, \
+    PasswordResetConfirmView, PasswordResetCompleteView
+from .forms import SignUpForm, LoginForm, CustomPasswordResetForm
 from django.views import View
 from django.contrib.auth import get_user_model
 # Create your views here.
@@ -156,6 +158,31 @@ class LogoutView(LoginRequiredMixin, View):
         return redirect('login')
 
 
+@method_decorator(csrf_protect, name='dispatch')
+class CustomPasswordResetView(PasswordResetView):
+    template_name = 'users/password_reset.html'
+    success_url = reverse_lazy('password_reset_done')
+    email_template_name = 'users/password_reset_email.html'
+    subject_template_name = 'users/password_reset_subject.txt'
+
+    # Specify the custom form to use
+    form_class = CustomPasswordResetForm
+
+
+# CustomPasswordResetDoneView extends the built-in PasswordResetDoneView
+class CustomPasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'users/password_reset_done.html'
+
+
+# CustomPasswordResetConfirmView extends the built-in PasswordResetConfirmView
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = 'users/password_reset_confirm.html'
+    success_url = reverse_lazy('password_reset_complete')
+
+
+# CustomPasswordResetCompleteView extends the built-in PasswordResetCompleteView
+class CustomPasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = 'users/password_reset_complete.html'
 
 
 
