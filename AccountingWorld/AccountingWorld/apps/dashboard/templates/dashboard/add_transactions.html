@@ -1,0 +1,467 @@
+{% extends 'dashboard/base.html' %}
+{% load humanize %}
+
+{% block title %}Home - Add Transactions{% endblock %}
+
+{% block content %}
+<div class="row">
+        <div class="col-md-5">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-success">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <form method="post" class="transaction-form" id="transaction-form" action="{% url 'add_transaction' %}">
+                {% csrf_token %}
+                <div class="col-md-4">
+<!--                    <h4 class="welcome-text">Add Transaction</h4>-->
+                    <h4>Add Transaction</h4>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="transaction-date">Enter the transaction date (dd-mm-yyyy)</label>
+                    <input type="date" id="transaction-date" name="date" class="form-control" autocomplete="off" required>
+                     {% if form.errors.date %}
+                        <p class="error-message">{{ form.errors.date }}</p>
+                    {% endif %}
+                    <br>
+                    <div id="error-message-date" class="alert alert-danger" style="display: none;"></div>
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="account">Select an account variable:</label>
+                    <select id="account" name="transaction_type" class="form-control">
+                        <option value="1">Sales on cash</option>
+                        <option value="2">Sales in credit</option>
+                        <option value="3">Expense in cash</option>
+                        <option value="4">Expense on credit</option>
+                        <option value="5">Client Pays for sales on credit</option>
+                        <option value="6">Expense on credit paid</option>
+                        <option value="7">Equity Investment</option>
+                        <option value="8">Loan</option>
+                        <option value="9">Loan repayment</option>
+                    </select>
+                    {% if form.errors.transaction_type %}
+                        <p class="error-message">{{ form.errors.transaction_type }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="amount">Enter the amount:</label>
+                    <input type="text" id="amount" name="amount" class="form-control" required>
+                     {% if form.errors.amount %}
+                        <p class="error-message ">{{ form.errors.amount }}</p>
+                    {% endif %}
+                    <br>
+                     <div id="error-message-amount" class="alert alert-danger" style="display: none;"></div>
+                </div>
+                <div class="col-md-4">
+                    <button id="add-transaction" class="btn btn-primary btn-sm" type="button">Add Transaction</button>
+                    <br><br>
+                    <!-- Add a div to display a success message -->
+                    <div id="success-message" class="alert alert-success" style="display: none;"></div>
+                    <br>
+                </div>
+            </form>
+             </div>
+        <div class="col-md-4">
+        <div id="profit-loss-container">
+            <h4>Profit/Loss</h4>
+            <table class="table table-bordered">
+        <thead>
+            <tr class="bg-primary text-white">
+                <th class="category">Category</th>
+                <th class="amount">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Sales:</td>
+                <td id="sales-amount">{{ sales|intcomma|floatformat:1 }}</td>
+            </tr>
+            <tr>
+                <td>Expenses:</td>
+                <td id="expenses-amount">{{ expenses|intcomma|floatformat:1 }}</td>
+            </tr>
+            <tr>
+                <td>Profit/Loss:</td>
+                <td id="profit-loss-amount">{{ profit_loss|intcomma|floatformat:1 }}</td>
+            </tr>
+        </tbody>
+    </table>
+        </div>
+
+
+            <div id="balance-sheet-container">
+            <h4>Balance Sheet</h4>
+            <!-- Add your Balance Sheet table here -->
+                <table class="table table-bordered table-sm ">
+                    <thead>
+                        <tr class="bg-primary text-white">
+                            <th>Category</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                    <tr>
+                        <td>Assets - Bank</td>
+                        <td id="bank-balance">{{ bank_balance|floatformat:1|intcomma }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Assets - Debtors</td>
+                        <td id="debtors-balance">{{ debtors_balance|floatformat:1|intcomma }}</td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Total Assets</strong></td>
+                        <td id="total-assets"><strong>{{ total_assets|floatformat:1|intcomma }}</strong></td>
+                    </tr>
+
+                    <tr>
+                        <td>Liabilities - Loan</td>
+                        <td id="loan-balance">{{ loan_balance|floatformat:1|intcomma }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Liabilities - Creditors</td>
+                        <td id="creditors-balance">{{ creditors_balance|floatformat:1|intcomma }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Liabilities - VAT</td>
+                        <td id="vat-balance">{{ vat_balance|floatformat:1|intcomma }}</td>
+                    </tr>
+
+                     <tr>
+                        <td>Liabilities - Equity</td>
+                        <td id="equity-balance">{{ equity_balance|floatformat:1|intcomma }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Equity - Retained Earnings</td>
+                        <td  id="retained-earnings">{{ retained_earnings|floatformat:1|intcomma }}</td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Total Liabilities and Equity</strong></td>
+                        <td id="total-liabilities-equity"><strong>{{ total_liabilities_equity|floatformat:1|intcomma }}</strong></td>
+                    </tr>
+
+                    </tbody>
+            </table>
+        </div>
+        <!-- Cashflow Data table -->
+        <div id="cashflow-container">
+            <h4>Cashflow Data</h4>
+            <div class="row">
+                <div class="col-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-sm" id="cashflow-table">
+                            <thead>
+                                <tr class="bg-primary text-white">
+                                    <th>Related Account</th>
+                                    <th>Debit</th>
+                                    <th>Credit</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Cashflow data will be inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add your Cashflow Data table here -->
+        </div>
+        </div>
+    </div>
+
+<!-- Include jQuery from a CDN -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+      document.addEventListener('DOMContentLoaded', function () {
+      // JavaScript function to handle the "Add Transaction" button click event
+      document.getElementById('add-transaction').addEventListener('click', function () {
+      // Gather the form data
+      var formData = {
+            'csrfmiddlewaretoken': document.getElementsByName('csrfmiddlewaretoken')[0].value,
+            'transaction_type': document.getElementById('account').value,
+            'date': document.getElementById('transaction-date').value,
+            'amount': document.getElementById('amount').value
+        };
+
+    // Perform your custom date and amount validation here
+    if (formData.date === '' || formData.amount === '' || parseFloat(formData.amount) < 0) {
+        //Perform your custom date validation here
+        if (formData.date == '') {
+            // Display an error message for the date field
+            document.getElementById('error-message-date').style.display = 'block';
+            document.getElementById('error-message-date').textContent = 'Please Provide a valid date.';
+        }
+
+        if (formData.amount == '' || parseFloat(formData.amount) < 0) {
+            // Display an error message for the date field
+            document.getElementById('error-message-amount').style.display = 'block';
+            document.getElementById('error-message-amount').textContent = 'Please Provide a valid amount.';
+        }
+
+         // Hide the success message after 3 seconds
+         setTimeout(function() {
+             document.getElementById('error-message-date').style.display = 'none';
+        }, 5000); // 5000 milliseconds (3 seconds) delay
+
+        // Hide the success message after 3 seconds
+         setTimeout(function() {
+             document.getElementById('error-message-amount').style.display = 'none';
+        }, 5000); // 5000 milliseconds (3 seconds) delay
+
+        return; // Exit the function without making the AJAX request
+        }
+
+        // Send an AJAX POST request to your Django view
+        $.ajax({
+            type: 'POST',
+            url: '{% url 'add_transaction' %}',  // Replace with your URL
+            data: formData,
+            success: function (data, textStatus, xhr) {
+                // Handle success: Display a success message and clear the form
+                if (xhr.status == 200) {
+                    document.getElementById('success-message').style.display = 'block';
+                    document.getElementById('success-message').textContent = data.message;
+                    document.getElementById('transaction-form').reset(); // Clear the form
+
+                    // Hide the success message after 3 seconds
+                     setTimeout(function() {
+                         document.getElementById('success-message').style.display = 'none';
+                    }, 5000); // 5000 milliseconds (3 seconds) delay
+
+                } else if (xhr.status == 400) {
+                    // Form Validation error
+                }
+                // After the transaction is added, fetch updated profit loss data
+                fetch('{% url 'calculate_profit_loss' %}', {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest' // Indicate an AJAX request
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Update the profit and loss table rows with the received data
+                    const salesAmount = document.getElementById('sales-amount');
+                    const expensesAmount = document.getElementById('expenses-amount');
+                    const profitLossAmount = document.getElementById('profit-loss-amount');
+
+                    salesAmount.textContent = data.sales.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+                    expensesAmount.textContent = data.expenses.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+                    profitLossAmount.textContent = data.profit_loss.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+
+                // Fetch the Balance Sheet data after the transaction is added
+                fetch('{% url 'get_balance_sheet' %}', {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest' // Indicate an AJAX request
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Update the Balance Sheet table rows with the received data
+                    const bankBalance = document.getElementById('bank-balance');
+                    const debtorsBalance = document.getElementById('debtors-balance');
+                    const totalAssets = document.getElementById('total-assets');
+                    const loanBalance = document.getElementById('loan-balance');
+                    const creditorsBalance = document.getElementById('creditors-balance');
+                    const vatBalance = document.getElementById('vat-balance');
+                    const equityBalance = document.getElementById('equity-balance');
+                    const retainedEarnings = document.getElementById('retained-earnings');
+                    const totalLiabilitiesEquity = document.getElementById('total-liabilities-equity');
+
+                    bankBalance.textContent = data.bank_balance.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+                    debtorsBalance.textContent = data.debtors_balance.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+                    totalAssets.textContent = data.total_assets.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+                    loanBalance.textContent = data.loan_balance.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+                    creditorsBalance.textContent = data.creditors_balance.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+                    vatBalance.textContent = data.vat_balance.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+                    equityBalance.textContent = data.equity_balance.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+                    retainedEarnings.textContent = data.retained_earnings.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+                    totalLiabilitiesEquity.textContent = data.total_liabilities_equity.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+                })
+                .catch(error => {
+                });
+                // Fetch the Cashflow data after the transaction is added
+                fetch('{% url 'get_cashflow_data' %}', {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest' // Indicate an AJAX request
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Update the Cashflow table rows with the received data
+                    const cashflowTableBody = document.querySelector('#cashflow-table tbody');
+                    cashflowTableBody.innerHTML = '';
+
+                    for(let i = 0; i < data.length; i++) {
+                     const row = document.createElement('tr');
+                     const entry = data[i]
+                     const relatedAccount = entry['Related Account'];
+                     const debit = entry.Debit.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1});
+                     const credit = entry.Credit.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1});
+                     const total = entry.Total.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1});
+
+                     row.innerHTML = `
+                            <td>${relatedAccount}</td>
+                            <td>${debit}</td>
+                            <td>${credit}</td>
+                            <td>${total}</td>
+                        `;
+                        cashflowTableBody.appendChild(row);
+                    }
+                })
+                .catch(error => {
+                });
+            },
+            error: function (xhr, errmsg, err) {
+                // Handle error: Display an error message
+                console.log(xhr.status + ': ' + xhr.responseText); // Log the error in the console
+            }
+        });
+    });
+
+    document.getElementById('reset-all').addEventListener('click', function () {
+
+    //Send an Ajax POST request to reset transactions
+    $.ajax({
+    type: 'POST',
+    url : '{% url 'reset_transactions' %}',
+    data: {
+        'csrfmiddlewaretoken': document.getElementsByName('csrfmiddlewaretoken')[0].value,
+    },
+    success: function (data) {
+
+        // Handle success: Display a success message
+
+        // After resetting transactions, fetch and update the data
+        fetchAndUpdateData();
+
+    },
+     error: function (xhr, errmsg, err) {
+            // Handle error: Display an error message
+            console.log(xhr.status + ': ' + xhr.responseText); // Log the error in the console
+        }
+    });
+});
+
+
+// Function to fetch and update data after resetting transactions
+function fetchAndUpdateData() {
+    // Fetch updated profit loss data
+    fetch('{% url 'calculate_profit_loss' %}', {
+        method: 'GET',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest' // Indicate an AJAX request
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Update the profit and loss table rows with the received data
+        const salesAmount = document.getElementById('sales-amount');
+        const expensesAmount = document.getElementById('expenses-amount');
+        const profitLossAmount = document.getElementById('profit-loss-amount');
+
+        salesAmount.textContent = data.sales.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+        expensesAmount.textContent = data.expenses.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+        profitLossAmount.textContent = data.profit_loss.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+
+    // Fetch and update the Balance Sheet data
+    fetch('{% url 'get_balance_sheet' %}', {
+        method: 'GET',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest' // Indicate an AJAX request
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Update the Balance Sheet table rows with the received data
+        const bankBalance = document.getElementById('bank-balance');
+        const debtorsBalance = document.getElementById('debtors-balance');
+        const totalAssets = document.getElementById('total-assets');
+        const loanBalance = document.getElementById('loan-balance');
+        const creditorsBalance = document.getElementById('creditors-balance');
+        const vatBalance = document.getElementById('vat-balance');
+        const equityBalance = document.getElementById('equity-balance');
+        const retainedEarnings = document.getElementById('retained-earnings');
+        const totalLiabilitiesEquity = document.getElementById('total-liabilities-equity');
+
+        bankBalance.textContent = data.bank_balance.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+        debtorsBalance.textContent = data.debtors_balance.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+        totalAssets.textContent = data.total_assets.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+        loanBalance.textContent = data.loan_balance.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+        creditorsBalance.textContent = data.creditors_balance.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+        vatBalance.textContent = data.vat_balance.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+        equityBalance.textContent = data.equity_balance.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+        retainedEarnings.textContent = data.retained_earnings.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+        totalLiabilitiesEquity.textContent = data.total_liabilities_equity.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+
+    // Fetch and update the Cashflow data
+    fetch('{% url 'get_cashflow_data' %}', {
+        method: 'GET',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest' // Indicate an AJAX request
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Update the Cashflow table rows with the received data
+        const cashflowTableBody = document.querySelector('#cashflow-table tbody');
+        cashflowTableBody.innerHTML = '';
+        for(let i = 0; i < data.length; i++) {
+             const row = document.createElement('tr');
+             const entry = data[i]
+             const relatedAccount = entry['Related Account'];
+             const debit = entry.Debit.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1});
+             const credit = entry.Credit.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1});
+             const total = entry.Total.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1});
+
+             row.innerHTML = `
+                    <td>${relatedAccount}</td>
+                    <td>${debit}</td>
+                    <td>${credit}</td>
+                    <td>${total}</td>
+                `;
+                cashflowTableBody.appendChild(row);
+            }
+        })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+// Call the fetchAndUpdateData function initially to load data when the page loads
+fetchAndUpdateData();
+
+});
+
+</script>
+
+
+{% endblock %}

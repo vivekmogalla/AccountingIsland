@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <title>{% block title %}Accounting World {% endblock %}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+{% include 'dashboard/navbar.html' %}
+  <!-- Content of other templates will go here -->
+  {% block content %}
+
+  {% endblock %}
+
+</body>
+</html>

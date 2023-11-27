@@ -1,0 +1,39 @@
+.transaction-heading {
+        font-family: Arial, sans-serif;
+        font-size: 28px;
+        font-weight: bold;
+        color:  violet;
+        text-align: center;
+        padding: 20px;
+        background-color: #f7f7f7;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+.welcome-text {
+        font-size: 20px;
+        font-weight: bold;
+        font-family: 'Courier New';
+        color: #78281F;
+        text-align: left;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        }
+.errorlist{
+        color: red;
+        margin-bottom: 1px;
+        list-style-type:none;
+        font-size: 20px;
+        padding-left: 0;
+        }
+.errorlist li {
+        margin-left: 10px; /* Add left margin for the list items */
+        }
+.custom-table-width {
+        max-width: 1000 px; /* Adjust the value as needed */
+        margin-left: auto;
+        margin-right: auto;
+        }
+th, td {
+      padding: 8px;
+      text-align: left;
+        }

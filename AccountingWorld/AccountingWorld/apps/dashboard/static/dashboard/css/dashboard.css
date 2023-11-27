@@ -1,0 +1,33 @@
+/* static/css/dashboard.css */
+
+.custom-dark-form {
+    background-color: #F9EBEA; /* Dark background color */
+    color: #641E16; /* Text color */
+    padding: 20px; /* Optional: Add padding for better readability */
+}
+
+.welcome-text {
+        font-size: 24px;
+        font-weight: bold;
+        font-family: 'Courier New';
+        color: #424949;
+        text-align: left;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        }
+
+.custom-btn {
+    background-color: #F9EBEA; /* Background color */
+    color: #78281F; /* Text color */
+    border: 1px solid #78281F; /* Add border */
+    padding: 5px 10px; /* Padding */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 14px; /* Font size */
+}
+
+/* Override the hover effect */
+.custom-btn:hover {
+    background-color: #F1948A; /* Darker background color on hover */
+    color: white; /* Text color on hover */
+    border-color: #F1948A; /* Darker border color on hover */
+}
