@@ -22,3 +22,8 @@ class SignUpForm(UserCreationForm):
         if email and user.objects.filter(email=email).exists():
             raise forms.ValidationError('The email already is already in use. Please use a different email.')
         return email
+
+
+class LoginForm(forms.Form):
+    username = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput)

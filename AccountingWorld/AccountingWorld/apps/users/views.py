@@ -12,16 +12,17 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.urls import reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
-from .forms import SignUpForm
+from .forms import SignUpForm, LoginForm
+from django.views import View
 from django.contrib.auth import get_user_model
 # Create your views here.
 
 
 def generate_activation_token(user):
     # Generate activation token with timestamp
-    # import pdb; pdb.set_trace()
     timestamp = timezone.now() + timezone.timedelta(days=1)
     token = account_activation_token.make_token(user) + str(int(timestamp.timestamp()))
     return token
@@ -119,3 +120,43 @@ def activate(request, uidb64, token):
     else:
         message = 'User is None'
         return render(request, 'users/user_activation.html', {'message': message})
+
+
+@method_decorator(csrf_protect, name='dispatch')
+class LoginPageView(FormView):
+    form_class = LoginForm
+    template_name = 'users/login.html'
+    success_url = reverse_lazy('dashboard')
+
+    def form_valid(self, form):
+        username = form.cleaned_data['username']
+        password = form.cleaned_data['password']
+
+        user = authenticate(username=username, password=password)
+
+        # check for inactive existing user in the database
+        existing_user_false = get_user_model().objects.filter(username=username, is_active=False).first()
+
+        if existing_user_false:
+            messages.error(self.request, f"user- {existing_user_false} is already existed and not activated, "
+                                         f"please check your registered mail and activate!")
+            return self.form_invalid(form)
+
+        elif user is not None:
+            login(self.request, user)
+            return super().form_valid(form)
+        else:
+            messages.error(self.request, f"Username or password is incorrect!")
+            return self.form_invalid(form)
+
+
+class LogoutView(LoginRequiredMixin, View):
+    def get(self, request):
+        logout(request)
+        return redirect('login')
+
+
+
+
+
+
