@@ -11,16 +11,24 @@ This is an accounting web application designed to help users manage their financ
 
 
 ## Features
-- **Transaction Management**: Add, edit, and delete financial transactions.
 
+1. **User Authorization: **
+   - Secure user registration with email confirmation.
+   - Login functionality with authentication checks.
+   - Logout feature for user sessions.
+   - Customized password reset functionality for enhanced security.
+  
+2. **Transaction Management**:
+    - Add, edit, and delete financial transactions.
 
-- **Profit and Loss Tracking**: Monitor your sales, expenses, and overall profit/loss.
+3. **Profit and Loss Tracking**:
+   - Effortlessly Monitor your sales, expenses, and track overall profit/loss.
 
+4. **Balance Sheet**:
+   - Gain insights into your financial health by viewing assets, liabilities, and equity.
 
-- **Balance Sheet**: View your assets, liabilities, and equity.
-
-
-- **Cash Flow Analysis**: Analyze cash inflow and outflow.
+5. **Cash Flow Analysis**: Analyze cash inflow and outflow for better financial planning.
+   - Analyze cash inflow and outflow for better financial planning.
 
 ## Getting Started
 
@@ -70,3 +78,107 @@ Before you begin, ensure you have met the following requirements:
 9. Start the development server:
 
         python manage.py runserver
+
+## Usage
+### User Authentication
+#### Signup
+1. Navigate to the signup page.
+
+   <img width="960" alt="image" src="https://github.com/vivekmogalla/AccountingIsland/assets/131423732/7bd6f564-ff36-406d-96bc-1dc66499254e">
+
+2. Fill out the required fields, including your email and password.
+
+   <img width="958" alt="image" src="https://github.com/vivekmogalla/AccountingIsland/assets/131423732/e99e22bd-4592-4999-9333-346559524f9b">
+
+3. Submit the form.
+
+   <img width="960" alt="image" src="https://github.com/vivekmogalla/AccountingIsland/assets/131423732/aba4ae35-fdc0-4bb2-b5df-f976999923fb">
+
+4. Check your registered email for an activation link.
+
+   <img width="960" alt="image" src="https://github.com/vivekmogalla/AccountingIsland/assets/131423732/d8a0c0bf-a02d-4511-96bf-cf3c5c8f67e3">
+
+5. Click on the activation link to activate your account.
+
+   <img width="960" alt="image" src="https://github.com/vivekmogalla/AccountingIsland/assets/131423732/87f60abd-ef51-464e-a09e-2ffe7b1018ce">
+
+
+
+
+#### Login
+1. Visit the login page.
+2. Enter your username and password.
+
+   <img width="959" alt="image" src="https://github.com/vivekmogalla/AccountingIsland/assets/131423732/186a115f-b039-47d3-b7f8-3253c0bdcf30">
+
+3. Click the login button.
+4. If your account is activated, you will be redirected to the dashboard.
+
+   <img width="960" alt="image" src="https://github.com/vivekmogalla/AccountingIsland/assets/131423732/6762f70a-fc5a-40ef-a821-3ad41e8a2110">
+
+
+#### Logout
+1. To logout, click on the logout option in the dashboard or visit the logout page.
+2. You will be logged out, and redirected to the login page.
+
+#### Password Reset
+1. If you forget your password, click on the "Forgot Password" link on the login page.
+
+   <img width="960" alt="image" src="https://github.com/vivekmogalla/AccountingIsland/assets/131423732/19ba4a95-4190-4daf-a569-1954a774dd8b">
+
+2. Enter your email address.
+3. Check your email for a password reset link.
+
+   <img width="958" alt="image" src="https://github.com/vivekmogalla/AccountingIsland/assets/131423732/ee228493-3675-470e-b963-e868b584bf2f">
+
+4. Click on the link to reset your password.
+   
+   <img width="960" alt="image" src="https://github.com/vivekmogalla/AccountingIsland/assets/131423732/4d1e326e-4715-4afd-be2f-3b1419d6fcc6">
+
+
+
+Note: Ensure that your account is activated before logging in. Activation links are sent to your registered email during the signup process.
+
+### Financial Management
+
+#### Adding Transactions
+
+1. Go to the 'Add Transactions' page.
+
+   <img width="313" alt="image" src="https://github.com/vivekmogalla/AccountingIsland/assets/131423732/e0496749-8370-44ca-abe7-f23a66403bbf">
+
+2. Fill in the type, date, and amount for the new transaction.
+
+   <img width="342" alt="image" src="https://github.com/vivekmogalla/AccountingIsland/assets/131423732/09fba1fa-dafa-46c8-ab8c-1da888c832e0">
+
+3. Submit the form to save the transaction.
+
+#### Viewing Transactions
+
+1. Visit the 'Transaction List' page from the dashboard, and navigate through the list using the pagination feature.
+
+   <img width="960" alt="image" src="https://github.com/vivekmogalla/AccountingIsland/assets/131423732/68254013-350b-4dad-b0f8-5438106963b3">
+
+3. Browse and filter transactions based on the selected account.
+
+   <img width="960" alt="image" src="https://github.com/vivekmogalla/AccountingIsland/assets/131423732/88ed05a6-7caa-4d1a-ab6b-6aa2bfce8cbf">
+
+
+#### Resetting Transactions
+
+1. Use the 'Reset Transactions' feature to clear all transactions
+
+   <img width="960" alt="image" src="https://github.com/vivekmogalla/AccountingIsland/assets/131423732/1909c72b-260b-4cbb-8625-58d7dcc76f30">
+
+
+#### Viewing Financial Summary
+
+1. Check the 'Balance Sheet' for insights into bank balance, debtors, VAT, etc.
+2. Analyze 'Cash Flow' to understand cash inflow and outflow.
+3. Calculate profit/loss with the 'Calculate Profit/Loss' function.
+4. All the above 3 options are displayed in the Dashboard page as shown below.
+
+   <img width="960" alt="image" src="https://github.com/vivekmogalla/AccountingIsland/assets/131423732/3bf4eb43-0309-430e-b4c5-4ba6e9692d6e">
+
+
+Note: Make sure you are logged in to access these features. Some actions may require specific permissions based on user roles.
