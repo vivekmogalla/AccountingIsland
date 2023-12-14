@@ -70,7 +70,7 @@ class SignupPageView(FormView):
     def get(self, request, *args, **kwargs):
         # if logged-in user tries to signup again. it redirects to dashboard as he is already authenticated
         if request.user.is_authenticated:
-            return HttpResponse("Yes")
+            return redirect('dashboard')
             # return redirect('dashboard')  # Redirect to the dashboard or another page
         return super().get(request, *args, **kwargs)
 
